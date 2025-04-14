@@ -15,7 +15,8 @@ WORKDIR /var/www
 COPY . .
 
 # Composer install
-RUN composer install --no-dev --optimize-autoloader
+RUN composer install --no-dev --optimize-autoloader \
+    && php artisan migrate --force
 
 # Laravel cache ürítés
 RUN php artisan config:clear \
