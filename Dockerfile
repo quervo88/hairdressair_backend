@@ -15,17 +15,16 @@ WORKDIR /var/www
 # Laravel fájlok másolása
 COPY . .
 
-# Composer install + migrációk automatikus futtatása
-RUN composer install --no-dev --optimize-autoloader \
-    && php artisan migrate --force
+# Composer telepítés
+RUN composer install --no-dev --optimize-autoloader
 
-# Laravel cache ürítése (opcionális, de javasolt)
+# Laravel cache ürítése
 RUN php artisan config:clear \
     && php artisan route:clear \
     && php artisan view:clear
 
-# HTTP port megnyitása (Render figyeli a 8000-est)
+# Port megnyitása
 EXPOSE 8000
 
-# Laravel beépített szerver indítása
-CMD php artisan serve --host=0.0.0.0 --port=8000
+# Futtatás: migrációk lefuttatása, majd a szerver indítása
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
