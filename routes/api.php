@@ -129,3 +129,12 @@ Route::get('/test', function () {
         'environment' => app()->environment(),
     ]);
 });
+
+Route::get('/check-db', function () {
+    try {
+        \Illuminate\Support\Facades\DB::connection()->getPdo();
+        return response()->json(['status' => 'ok', 'message' => 'DB connection successful!']);
+    } catch (\Exception $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()]);
+    }
+});
