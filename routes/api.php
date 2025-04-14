@@ -121,3 +121,11 @@ Route::get("/getserviceid", [ServiceController::class, "getServiceId"]);
 // Route::post("/logout", [UserController::class, "logout"]);
 
 Route::middleware('auth:sanctum')->get('/getbookings', [BookingController::class, 'getBookings']);
+
+Route::get('/test', function () {
+    return response()->json([
+        'status' => 'ok',
+        'message' => 'Laravel API működik Renderen 🎉',
+        'environment' => app()->environment(),
+    ]);
+});
