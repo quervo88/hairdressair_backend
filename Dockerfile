@@ -1,23 +1,17 @@
 FROM php:8.2-cli
 
-# Alap csomagok + extensionök + Swoole
+# Rendszer csomagok
 RUN apt-get update && apt-get install -y \
     git curl zip unzip libzip-dev libpng-dev libonig-dev libxml2-dev libcurl4-openssl-dev \
-    libssl-dev pkg-config \
-    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath sockets \
-    && pecl install swoole \
-    && docker-php-ext-enable swoole
+    && docker-php-ext-install pdo_mysql mbstring zip exif pcntl bcmath sockets
 
-# Composer másolása
+# Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# php.ini override (pcntl_* engedélyezése)
-COPY docker-php.ini /usr/local/etc/php/conf.d/docker-php.ini
-
-# Projekt gyökér
+# App mappa
 WORKDIR /var/www
 
-# Fájlok bemásolása
+# Fájlok
 COPY . .
 
 # Composer install
@@ -28,8 +22,8 @@ RUN php artisan config:clear \
     && php artisan route:clear \
     && php artisan view:clear
 
-# Port nyitása Octane számára
+# Port nyitása
 EXPOSE 8000
 
-# Octane indítás
-CMD ["php", "artisan",
+# Laravel beépített webszerver indítása
+CMD ["php", "artisan", "serve
